@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
 import { usePurchase } from "../../contexts/purchaseContext";
-import { PlanCard } from "./style";
+import { PlanCard, Step2Container, StepControl2 } from "./style";
+import * as Switch from '@radix-ui/react-switch';
 
 interface Plan{
     thumbURL: string,
@@ -10,13 +10,13 @@ interface Plan{
 }
 
 export function Step2(){
-    const { yearly, toggleYearly, availablePlans, currentPlan, updateCurrentPlan } = usePurchase()
+    const { yearly, toggleYearly, availablePlans, currentPlan, updateCurrentPlan, updateCurrentStep } = usePurchase()
     
     return(
-        <>
+        <Step2Container>
             <h1>Select your plan</h1>
             <p>You have the option of monthly or yearly billing.</p>
-            <div>
+            <div id="plans">
                 { availablePlans.map(plan => (
                     <PlanCard 
                         key={plan.name} 
@@ -24,26 +24,31 @@ export function Step2(){
                         onClick={() => updateCurrentPlan(plan)}
                     >
                         <img src={plan.thumbURL} alt={plan.name + "'s image thumb"} />
-                        <h2>{plan.name}</h2>
-                        <p>${ yearly ? plan.yearly + "/yr" : plan.monthly + "/mo"}</p>
-                        { yearly 
-                            ? <span>2 months free</span>
-                            : <></>
-                        }
+                        <div>
+                            <h2>{plan.name}</h2>
+                            <p>${ yearly ? plan.yearly + "/yr" : plan.monthly + "/mo"}</p>
+                            { yearly 
+                                ? <span className="free">2 months free</span>
+                                : <></>
+                            }
+                        </div>
                     </PlanCard>
                 ))}
             </div>
-            <div>
-                <span>Monthly</span>
-                <input type="checkbox" onClick={toggleYearly} /> 
+            <div id="monthly-yearly">
+                <span className={yearly ? "" : "active"}>Monthly</span>
                 
-                <span>Yearly</span>
+                <Switch.Root className="SwitchRoot" id="airplane-mode" onClick={toggleYearly} checked={yearly}>
+                    <Switch.Thumb className="SwitchThumb" />
+                </Switch.Root>
+                
+                <span className={yearly ? "active" : ""}>Yearly</span>
             </div>
             
-            <div>
-                <button type="button">Go Back</button>
-                <button type="button">Next Step</button>
-            </div>
-        </>
+            <StepControl2>
+                <button className="previous" type="button" onClick={() => updateCurrentStep(-1)}>Go Back</button>
+                <button className="next" type="button" onClick={() => updateCurrentStep(1)}>Next Step</button>
+            </StepControl2>
+        </Step2Container>
     )
 }

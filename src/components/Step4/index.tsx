@@ -1,21 +1,22 @@
 import { usePurchase } from "../../contexts/purchaseContext"
+import { StepControl2 } from "../Step2/style"
 
 export function Step4(){
-    const { currentPlan, yearly, currentAddOns } = usePurchase()
+    const { currentPlan, yearly, currentAddOns, updateCurrentStep } = usePurchase()
     
     function calculateTotal(){
-        let sum = 0;
-        if(currentAddOns.length > 0){
-            sum = currentAddOns.reduce((prevValue, currentValue) => (
+        if(currentPlan && currentAddOns.length > 0){
+            const sum = currentAddOns.reduce((prevValue, currentValue) => (
                 yearly 
                     ? prevValue + currentValue.yearly 
                     : prevValue + currentValue.monthly)
                 , 0)
-        return  currentPlan 
-            ? yearly
-            ? currentPlan?.yearly! + sum : currentPlan?.monthly! + sum
-            : 0
+            return yearly ? sum + currentPlan.yearly : sum + currentPlan.monthly
         }
+        if(currentPlan){
+            return yearly ? currentPlan.yearly : currentPlan.monthly
+        }
+        return 0
     }
     
     return(
@@ -44,14 +45,14 @@ export function Step4(){
                 ))}
             </div>
             <div>
-                <h3>{"Total (per " + yearly ? "year" : "month" + ")"}</h3>
-                <span>$</span>
+                <h3>{"Total (per " + (yearly ? "year" : "month") + ")"}</h3>
+                <span>${calculateTotal()}</span>
             </div>
 
-            <div>
-                <button type="button">Go Back</button>
-                <button type="button">Confirm</button>
-            </div>
+            <StepControl2>
+                <button className="previous" type="button" onClick={() => updateCurrentStep(-1)}>Go Back</button>
+                <button className="next" type="button" onClick={() => updateCurrentStep(1)}>Confirm</button>
+            </StepControl2>
         </>
     )
 }
