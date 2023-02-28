@@ -1,5 +1,6 @@
 import { usePurchase } from "../../contexts/purchaseContext"
 import { StepControl2 } from "../Step2/style"
+import { Step4Container } from "./style"
 
 export function Step4(){
     const { currentPlan, yearly, currentAddOns, updateCurrentStep } = usePurchase()
@@ -20,22 +21,24 @@ export function Step4(){
     }
     
     return(
-        <>
+        <Step4Container>
             <h1>Finishing up</h1>
             <p>Double-check everything looks OK before confirming.</p>
 
-            <div>
-                <div>
+            <div id="summary">
+                <div className="summaryHeader">
                     <div>
                         <h2>
                             <span>{currentPlan?.name}</span> <span>{yearly ? "(Yearly)" : "(Montly)"}</span>
                         </h2>
-                        <span>Change</span>
+                        <span id="changer">Change</span>
                     </div>
                     <span>${yearly 
                         ? String(currentPlan?.yearly) + "/yr" 
-                        : String(currentPlan?.monthly) + "/mo"}</span>
+                        : String(currentPlan?.monthly) + "/mo"}
+                    </span>
                 </div>
+
                 <hr />
                 { currentAddOns.map(addOn => (
                     <div key={addOn.addOn}>
@@ -53,6 +56,6 @@ export function Step4(){
                 <button className="previous" type="button" onClick={() => updateCurrentStep(-1)}>Go Back</button>
                 <button className="next" type="button" onClick={() => updateCurrentStep(1)}>Confirm</button>
             </StepControl2>
-        </>
+        </Step4Container>
     )
 }
