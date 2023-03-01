@@ -1,9 +1,9 @@
 import { usePurchase } from "../../contexts/purchaseContext"
 import { StepControl2 } from "../Step2/style"
-import { Step4Container } from "./style"
+import { Confirm, Step4Container } from "./style"
 
 export function Step4(){
-    const { currentPlan, yearly, currentAddOns, updateCurrentStep } = usePurchase()
+    const { currentPlan, yearly, toggleYearly, currentAddOns, updateCurrentStep } = usePurchase()
     
     function calculateTotal(){
         if(currentPlan && currentAddOns.length > 0){
@@ -29,33 +29,33 @@ export function Step4(){
                 <div className="summaryHeader">
                     <div>
                         <h2>
-                            <span>{currentPlan?.name}</span> <span>{yearly ? "(Yearly)" : "(Montly)"}</span>
+                            {currentPlan?.name} {yearly ? "(Yearly)" : "(Montly)"}
                         </h2>
-                        <span id="changer">Change</span>
+                        <p id="changer" onClick={toggleYearly}>Change</p>
                     </div>
-                    <span>${yearly 
+                    <div>${yearly 
                         ? String(currentPlan?.yearly) + "/yr" 
                         : String(currentPlan?.monthly) + "/mo"}
-                    </span>
+                    </div>
                 </div>
 
                 <hr />
                 { currentAddOns.map(addOn => (
-                    <div key={addOn.addOn}>
+                    <div key={addOn.addOn} className="addOn">
                         <h3>{addOn.addOn}</h3>
                         <span>+${ yearly ? String(addOn.yearly) + "/yr" : String(addOn.monthly) + "/mo"}</span>
                     </div>
                 ))}
             </div>
-            <div>
+            <div id="total">
                 <h3>{"Total (per " + (yearly ? "year" : "month") + ")"}</h3>
-                <span>${calculateTotal()}</span>
+                <p>${calculateTotal()}</p>
             </div>
 
-            <StepControl2>
+            <Confirm>
                 <button className="previous" type="button" onClick={() => updateCurrentStep(-1)}>Go Back</button>
                 <button className="next" type="button" onClick={() => updateCurrentStep(1)}>Confirm</button>
-            </StepControl2>
+            </Confirm>
         </Step4Container>
     )
 }

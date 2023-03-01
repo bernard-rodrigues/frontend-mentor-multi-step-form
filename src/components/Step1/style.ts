@@ -34,6 +34,8 @@ export const Step1Container = styled.div`
             border-radius: 3px;
             padding-left: 14px;
             font-size: 15px;
+            font-family: 'Ubuntu500';
+            color: ${props => props.theme.marineBlue};
 
             &:focus{
                 outline: none;
