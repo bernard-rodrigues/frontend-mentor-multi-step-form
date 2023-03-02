@@ -18,9 +18,9 @@ export const Step4Container = styled.div`
     }
 
     #summary{
-        height: 148px;
+
         background-color: ${props => props.theme.alabaster};
-        padding: 16px 16px;
+        padding: 16px 16px 3px 16px;
 
         .summaryHeader{
             display: flex;
@@ -77,7 +77,7 @@ export const Step4Container = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 23px 16px 10px 16px;
+        padding: 22px 16px 10px 16px;
 
         h3{
             font-family: 'Ubuntu400';
